@@ -28,8 +28,7 @@ bot.use(stage.middleware());
 auth.addEventHandlers(bot);
 
 expressApp.use(bot.webhookCallback("/unity-path"));
-// bot.telegram.setWebhook(`${process.env.BOT_URL}/unity-path`);
-bot.startWebhook("/unity-path", null, process.env.PORT);
+bot.telegram.setWebhook(`${process.env.BOT_URL}:5055/unity-path`);
 
 expressApp.get("/", (req, res) => {
     res.send("Hello World!");
