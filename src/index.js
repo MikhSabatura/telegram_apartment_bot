@@ -9,9 +9,9 @@ const expressApp = express();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.telegram.deleteWebhook();
-// bot.telegram.setWebhook(`${process.env.BOT_URL}/bot${process.env.BOT_TOKEN}`);
+bot.telegram.setWebhook(`${process.env.BOT_URL}/bot${process.env.BOT_TOKEN}`);
 // bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, null, process.env.PORT);
-// expressApp.use(bot.webhookCallback(`/bot${process.env.BOT_TOKEN}`));
+expressApp.use(bot.webhookCallback(`/bot${process.env.BOT_TOKEN}`));
 
 const stage = new Stage([
     AprtMenu.aprtSearchScene,
