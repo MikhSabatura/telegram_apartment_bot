@@ -4,6 +4,8 @@ const Stage = require("telegraf/stage");
 const auth = require("./auth");
 const AprtMenu = require("./aprtMenu");
 const UserMenu = require("./userMenu");
+const express = require("express");
+const expressApp = express();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const stage = new Stage([
@@ -24,4 +26,13 @@ bot.use(auth.authenticate);
 bot.use(auth.filterAuthorized);
 bot.use(stage.middleware());
 auth.addEventHandlers(bot);
-bot.launch();
+
+expressApp.use(bot.webhookCallback("/unity-path"));
+bot.telegram.setWebhook(`${process.env.BOT_URL}/unity-path`);
+
+expressApp.get("/", (req, res) => {
+    res.send("Hello World!");
+});
+expressApp.listen(3000, () => {
+    console.log("Example app listening on port 3000!");
+});
