@@ -8,7 +8,9 @@ const express = require("express");
 const expressApp = express();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-bot.telegram.setWebhook(`${process.env.BOT_URL}/unity-path`);
+bot.telegram.setWebhook(`${process.env.BOT_URL}/bot${process.env.BOT_TOKEN}`);
+expressApp.use(bot.webhookCallback(`/bot${process.env.BOT_TOKEN}`));
+
 const stage = new Stage([
     AprtMenu.aprtSearchScene,
     AprtMenu.aprtSearchByIdScene,
@@ -27,8 +29,6 @@ bot.use(auth.authenticate);
 bot.use(auth.filterAuthorized);
 bot.use(stage.middleware());
 auth.addEventHandlers(bot);
-
-expressApp.use(bot.webhookCallback("/unity-path"));
 
 expressApp.get("/", (req, res) => {
     res.send("Hello World!");
