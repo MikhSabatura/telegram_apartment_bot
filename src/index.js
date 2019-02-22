@@ -31,7 +31,7 @@ bot.use(auth.authenticate);
 bot.use(auth.filterAuthorized);
 bot.use(stage.middleware());
 auth.addEventHandlers(bot);
-bot.startPolling();
+// bot.startPolling();
 
 expressApp.get("/", (req, res) => {
     res.send("Hello World!");
