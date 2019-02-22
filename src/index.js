@@ -28,11 +28,11 @@ bot.use(stage.middleware());
 auth.addEventHandlers(bot);
 
 expressApp.use(bot.webhookCallback("/unity-path"));
-bot.telegram.setWebhook(`${process.env.BOT_URL}/unity-path`);
+bot.telegram.setWebhook(`${process.env.BOT_URL}:${process.env.PORT}/unity-path`);
 
 expressApp.get("/", (req, res) => {
     res.send("Hello World!");
 });
-expressApp.listen(3000, () => {
+expressApp.listen(process.env.PORT, () => {
     console.log("Example app listening on port 3000!");
 });
