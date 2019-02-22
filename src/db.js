@@ -1,8 +1,9 @@
 const { Pool } = require("pg");
-const connectionString = "postgresql://localhost:5432/unity_bot";
+const connectionString = process.env.DATABASE_URL;
 
 const pool = new Pool({
-    connectionString: connectionString
+    connectionString: connectionString,
+    ssl: true
 });
 
 module.exports = {
