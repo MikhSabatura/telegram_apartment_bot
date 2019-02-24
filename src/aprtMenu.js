@@ -83,8 +83,8 @@ function sendApartmentResults(ctx) {
         if (sendIndx == aprts.length) {
             clearInterval(intervalId);
             if (ctx.session.apartmentResults.length) {
-                ctx.reply("Load more", Extra.HTML().markup((m) =>
-                    m.inlineKeyboard([m.callbackButton("Yes", "nextPage:nextPage")])));
+                ctx.reply("ᅠ ᅠ", Extra.HTML().markup((m) =>
+                    m.inlineKeyboard([m.callbackButton("More", "nextPage:nextPage")])));
             } else {
                 ctx.scene.leave();
             }
