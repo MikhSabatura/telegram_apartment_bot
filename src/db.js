@@ -5,6 +5,7 @@ console.log(connectionString);
 const pool = new Pool({
     connectionString: connectionString
 });
+console.log(pool);
 
 module.exports = {
     query: (query) => {
