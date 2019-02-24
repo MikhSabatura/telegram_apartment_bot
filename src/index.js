@@ -1,17 +1,21 @@
 const Telegraf = require("telegraf");
 const session = require("telegraf/session");
 const Stage = require("telegraf/stage");
+const fs = require("fs");
 const auth = require("./auth");
 const AprtMenu = require("./aprtMenu");
 const UserMenu = require("./userMenu");
-// const express = require("express");
-// const expressApp = express();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-bot.telegram.deleteWebhook();
-// bot.telegram.setWebhook(`${process.env.BOT_URL}/bot${process.env.BOT_TOKEN}`);
-// bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, null, process.env.PORT);
-// expressApp.use(bot.webhookCallback(`/bot${process.env.BOT_TOKEN}`));
+
+const tlsOptions = {
+    key: fs.readFileSync("PRIVATE.key"),
+    cert: fs.readFileSync("PUBLIC.pem")
+};
+
+bot.telegram.setWebhook(`https://${process.env.BOT_URL}:8443/bot${process.env.BOT_TOKEN}`, {
+    source: "PUBLIC.pem"
+});
 
 const stage = new Stage([
     AprtMenu.aprtSearchScene,
@@ -31,11 +35,5 @@ bot.use(auth.authenticate);
 bot.use(auth.filterAuthorized);
 bot.use(stage.middleware());
 auth.addEventHandlers(bot);
-bot.startPolling();
 
-// expressApp.get("/", (req, res) => {
-//     res.send("Hello World!");
-// });
-// expressApp.listen(process.env.PORT, () => {
-//     console.log(`Example app listening on port ${process.env.PORT}!`);
-// });
+bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, tlsOptions, 8443);
