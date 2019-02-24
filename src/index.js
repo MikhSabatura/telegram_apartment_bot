@@ -9,8 +9,8 @@ const UserMenu = require("./userMenu");
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const tlsOptions = {
-    key: fs.readFileSync("PRIVATE.key"),
-    cert: fs.readFileSync("PUBLIC.pem")
+    key: fs.readFileSync("YOURPRIVATE.key"),
+    cert: fs.readFileSync("YOURPUBLIC.pem")
 };
 
 bot.telegram.setWebhook(`https://${process.env.BOT_URL}:8443/bot${process.env.BOT_TOKEN}`, {
