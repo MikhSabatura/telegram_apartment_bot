@@ -14,7 +14,7 @@ const tlsOptions = {
 };
 
 bot.telegram.setWebhook(`https://${process.env.BOT_URL}:8443/bot${process.env.BOT_TOKEN}`, {
-    source: "PUBLIC.pem"
+    source: "YOURPUBLIC.pem"
 });
 
 const stage = new Stage([
