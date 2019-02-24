@@ -9,6 +9,7 @@ const backMark = "⬅";
 const okMark = "✔";
 const notOkMark = "🚫";
 const selectedMark = "✅";
+const pageSize = 5;
 
 const aprtOptionsRouter = new Router(({
     callbackQuery
@@ -56,31 +57,41 @@ function findApartments(ctx) {
 
     ctx.editMessageText("Searching...");
     aprtRepo.findApartments(query)
-        .then(apts => apts.map(apt => ({
-            text: formatApartmentTextInfo(apt, ctx),
-            photos: apt.photos.map(photoId => ({
-                type: "photo",
-                media: photoId
-            }))
-        })))
-        .then(aptsInfo => {
-            if (!aptsInfo.length) {
+        .then(aprts => ctx.session.apartmentResults = aprts)
+        .then(() => {
+            if (!ctx.session.apartmentResults.length) {
                 ctx.reply("Nothing found");
                 ctx.scene.leave();
                 return;
+            } else {
+                sendApartmentResults(ctx);
             }
-            let aptIndx = 0;
-            let intervalId = setInterval(() => {
-                if (aptIndx == aptsInfo.length) {
-                    clearInterval(intervalId);
-                    return;
-                }
-                sendApartmentInfo(aptsInfo[aptIndx++], ctx);
-            }, 800);
         })
-        // TODO: send button with request for next page
-        .then(() => ctx.scene.leave())
         .catch(err => console.log(err));
+}
+
+function sendApartmentResults(ctx) {
+    let aprts = ctx.session.apartmentResults.splice(0, pageSize).map(apt => ({
+        text: formatApartmentTextInfo(apt, ctx),
+        photos: apt.photos.map(photoId => ({
+            type: "photo",
+            media: photoId
+        }))
+    }));
+    let sendIndx = 0;
+    let intervalId = setInterval(() => {
+        if (sendIndx == aprts.length) {
+            clearInterval(intervalId);
+            if (ctx.session.apartmentResults.length) {
+                ctx.reply("Load more", Extra.HTML().markup((m) =>
+                    m.inlineKeyboard([m.callbackButton("Yes", "nextPage:nextPage")])));
+            } else {
+                ctx.scene.leave();
+            }
+            return;
+        }
+        sendApartmentInfo(aprts[sendIndx++], ctx);
+    }, 800);
 }
 
 // -------------- search apartment by id ------------------
@@ -283,6 +294,13 @@ aprtOptionsRouter.on("roomCount", (ctx) => {
     displayRoomCountMenu(ctx);
 });
 
+aprtOptionsRouter.on("nextPage", (ctx) => {
+    if (ctx.session.apartmentResults && ctx.session.apartmentResults.length) {
+        ctx.editMessageText("Loading...");
+        sendApartmentResults(ctx);
+    }
+});
+
 function singleChoiceDistrict(ctx) {
     ctx.session.districts.forEach(d => d.isChosen = (d.iddistrict == ctx.state.value));
 }
@@ -392,6 +410,7 @@ function backOkButtons(ctx, m) {
 function clearSession(ctx) {
     ctx.session.districts = [];
     ctx.session.roomCounts = [];
+    ctx.session.apartmentResults = [];
 }
 
 function checkSelection(element, str) {
