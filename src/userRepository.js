@@ -16,13 +16,6 @@ function getUserRole(user) {
                 return null;
             }
             let userInfo = rows[0];
-            // if the user is registered and the id is not the same, return;
-            if (userInfo.telegramId && user.telegramId != userInfo.telegramid) {
-                console.log("User with the same username but different id");
-                console.log(user);
-                console.log(userInfo);
-                return;
-            }
             console.log(userInfo);
             return userInfo;
         })
