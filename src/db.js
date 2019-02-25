@@ -1,15 +1,9 @@
 const { Pool } = require("pg");
 const connectionString = process.env.DATABASE_URL;
-console.log(connectionString);
 
 const pool = new Pool({
-    // connectionString: connectionString
-    user: "root",
-    host: "localhost",
-    database: "unity_telegram_bot",
-    port: 5432
+    connectionString: connectionString
 });
-console.log(pool);
 
 module.exports = {
     query: (query) => {
