@@ -4,7 +4,7 @@ console.log(connectionString);
 
 const pool = new Pool({
     // connectionString: connectionString
-    user: "postgres",
+    user: "root",
     host: "localhost",
     database: "unity_telegram_bot",
     port: 5432
