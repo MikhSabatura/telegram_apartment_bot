@@ -6,7 +6,7 @@ const pool = new Pool({
     // connectionString: connectionString
     user: "postgres",
     host: "localhost",
-    database: "unity_bot_db",
+    database: "unity_telegram_bot",
     port: 5432
 });
 console.log(pool);
