@@ -7,6 +7,7 @@ const AprtMenu = require("./aprtMenu");
 const UserMenu = require("./userMenu");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
+bot.deleteWebhook();
 
 // const tlsOptions = {
 //     key: fs.readFileSync("YOURPRIVATE.key"),
