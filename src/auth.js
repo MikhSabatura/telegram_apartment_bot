@@ -65,6 +65,7 @@ function filterAuthorized(ctx, next) {
 
 function addEventHandlers(whatever) {
     whatever.start(ctx => {
+        console.log("here");
         return ctx.reply("Hello", Markup
             .keyboard(keyboard[ctx.session.userRole])
             .resize()

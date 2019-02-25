@@ -45,7 +45,7 @@ function addUserId(user) {
                         WHERE TelegramUsername = $2";
     const query = {
         text: queryText,
-        values: [user.id, user.username]
+        values: [user.telegramId, user.username]
     };
     return db.query(query);
 }
