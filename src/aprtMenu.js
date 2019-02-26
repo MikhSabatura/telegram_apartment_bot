@@ -83,8 +83,10 @@ function sendApartmentResults(ctx) {
         if (sendIndx == aprts.length) {
             clearInterval(intervalId);
             if (ctx.session.apartmentResults.length) {
-                ctx.reply("ᅠ ᅠ", Extra.HTML().markup((m) =>
-                    m.inlineKeyboard([m.callbackButton("More", "nextPage:nextPage")])));
+                setTimeout(() => {
+                    ctx.reply("ᅠ ᅠ", Extra.HTML().markup((m) =>
+                        m.inlineKeyboard([m.callbackButton("More", "nextPage:nextPage")])));
+                }, 200);
             } else {
                 ctx.scene.leave();
             }
@@ -102,9 +104,9 @@ aprtSearchByIdScene.enter(ctx => ctx.reply("Send apartment id (without \"#\")"))
 
 aprtSearchByIdScene.on("text", ctx => {
     auth.userCanAccessApartment({
-        telegramId: ctx.from.id,
-        role: ctx.session.userRole
-    }, ctx.message.text)
+            telegramId: ctx.from.id,
+            role: ctx.session.userRole
+        }, ctx.message.text)
         .then(userHasAccess => {
             if (userHasAccess) {
                 return aprtRepo.findApartmentById(ctx.message.text);
@@ -186,8 +188,8 @@ aprtCreateScene.on("text", ctx => {
             Markup.keyboard(auth.keyboard[ctx.session.userRole].concat([
                 [aprtCreateScene.doneCommand]
             ]))
-                .resize()
-                .extra());
+            .resize()
+            .extra());
     } else {
         ctx.session.description = ctx.message.text;
         ctx.reply("Description was changed");
@@ -213,9 +215,9 @@ aprtDeleteScene.enter(ctx => ctx.reply("Enter apartment id (without \"#\")"));
 
 aprtDeleteScene.on("text", ctx => {
     auth.userCanAccessApartment({
-        id: ctx.session.userId,
-        role: ctx.session.userRole
-    }, ctx.message.text)
+            id: ctx.session.userId,
+            role: ctx.session.userRole
+        }, ctx.message.text)
         .then(userHasAccess => {
             if (userHasAccess) {
                 return aprtRepo.deleteApartment(ctx.message.text);
