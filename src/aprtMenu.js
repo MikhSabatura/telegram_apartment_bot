@@ -103,17 +103,19 @@ auth.addEventHandlers(aprtSearchByIdScene);
 aprtSearchByIdScene.enter(ctx => ctx.reply("Send apartment id (without \"#\")"));
 
 aprtSearchByIdScene.on("text", ctx => {
-    auth.userCanAccessApartment({
-            telegramId: ctx.from.id,
-            role: ctx.session.userRole
-        }, ctx.message.text)
-        .then(userHasAccess => {
-            if (userHasAccess) {
-                return aprtRepo.findApartmentById(ctx.message.text);
-            } else {
-                return Promise.reject("user doesn't have access");
-            }
-        })
+    let tempPromise = Promise.resolve();
+    if (ctx.session.userRole == auth.userRoles.broker) {
+        tempPromise = auth.userCanAccessApartment({
+                telegramId: ctx.from.id,
+                role: ctx.session.userRole
+            }, ctx.message.text)
+            .then(userHasAccess => {
+                if (!userHasAccess) {
+                    return Promise.reject("user doesn't have access");
+                }
+            });
+    }
+    tempPromise.then(() => aprtRepo.findApartmentById(ctx.message.text))
         .then(rows => {
             if (!rows.length) {
                 return Promise.reject("nothing found");
