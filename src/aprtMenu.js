@@ -86,7 +86,7 @@ function sendApartmentResults(ctx) {
                 setTimeout(() => {
                     ctx.reply("ᅠ ᅠ", Extra.HTML().markup((m) =>
                         m.inlineKeyboard([m.callbackButton("More", "nextPage:nextPage")])));
-                }, 1000);
+                }, 2000);
             } else {
                 ctx.scene.leave();
             }

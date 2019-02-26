@@ -14,7 +14,7 @@ const userRoles = {
 
 const keyboard = {};
 keyboard[userRoles.searcher] = [
-    ["🔍 Search"]
+    ["🔍 Search", "🔍 by id"]
 ];
 keyboard[userRoles.broker] = [
     ["Add 🏠", "Delete 🏠"]
@@ -23,7 +23,7 @@ keyboard[userRoles.admin] = [
     ["Add searcher", "Remove searcher"],
     ["Add broker", "Remove broker"],
     keyboard[userRoles.broker][0],
-    keyboard[userRoles.searcher][0].concat("🔍 by id")
+    keyboard[userRoles.searcher][0]
 ];
 
 const notAuthorizedMessage = "You're not authorized\nContact @UnityV for registration";
