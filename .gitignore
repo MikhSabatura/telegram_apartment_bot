@@ -3,3 +3,5 @@
 **/.eslintrc.json
 **/sidenotes
 **/.vscode
+sql/inserts.sql
+sql/other.sql
